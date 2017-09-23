@@ -1,15 +1,13 @@
 
-PKCoreData
+Expandable-List
 =========
 
-## Add user details in coredata
+## Expandable-List with multiple radio button selection.
 ------------
  Added Some screens here.
  
-[![](https://github.com/pawankv89/PKCoreData/blob/master/images/screen_1.png)]
-[![](https://github.com/pawankv89/PKCoreData/blob/master/images/screen_2.png)]
-[![](https://github.com/pawankv89/PKCoreData/blob/master/images/screen_3.png)]
-[![](https://github.com/pawankv89/PKCoreData/blob/master/images/screen_4.png)]
+[![](https://github.com/pawankv89/Expandable-List/blob/master/images/screen_1.png)]
+[![](https://github.com/pawankv89/Expandable-List/blob/master/images/screen_2.png)]
 
 
 ## Usage
@@ -18,26 +16,45 @@ PKCoreData
 
 
 ```objective-c
-//MARK: Add Person Record List
-    @IBAction func adduttonAction(_ sender: Any) {
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+
+    DetailsCell *cell = (DetailsCell *)[tableView cellForRowAtIndexPath:indexPath];
+    
+    NSDictionary *dict = [[[self.items objectAtIndex:indexPath.section] objectForKey:@"List"] objectAtIndex:indexPath.row];
+
+    NSString *selectedItemId= [dict objectForKey:@"id"];
+    NSString *isSelected = [dict objectForKey:@"isSelected"];
+    
+    isSelected = @"YES";
+    cell.radioImageView.image = [UIImage imageNamed:@"radioSelected"];
+    
+    NSArray *iTemsSubArray = [[self.items objectAtIndex:indexPath.section] objectForKey:@"List"];
+    
+    for (int counter =0; counter < [iTemsSubArray count]; counter++) {
         
-        if name.text! == "" || age.text! == "" || phone.text! == "" {
-            return
+        NSDictionary *dictSubItem = [iTemsSubArray objectAtIndex:counter];
+     
+        if ([[dictSubItem objectForKey:@"id"] isEqualToString:selectedItemId]) {
+            
+            NSMutableDictionary *newDict = [[NSMutableDictionary alloc] init];
+            [newDict addEntriesFromDictionary:dictSubItem];
+            [newDict setObject:isSelected forKey:@"isSelected"];
+            
+            [[[self.items objectAtIndex:indexPath.section] objectForKey:@"List"] replaceObjectAtIndex:counter withObject:newDict];
+            
+        }else{
+        
+            NSMutableDictionary *newDict = [[NSMutableDictionary alloc] init];
+            [newDict addEntriesFromDictionary:dictSubItem];
+            [newDict setObject:@"NO" forKey:@"isSelected"];
+        
+             [[[self.items objectAtIndex:indexPath.section] objectForKey:@"List"] replaceObjectAtIndex:counter withObject:newDict];
         }
-        
-        let person = Person()
-        
-        person.name = name.text!
-        person.age = age.text!
-        person.phone = phone.text!
-        person.gender = "Male"
-        person.location = "Noida"
-        person.accountType = "IOS"
-        
-        CoreDataStack.shared.insertPersonRecord(person: person)
-        
-        self.navigationController?.popViewController(animated: true)
     }
+    
+    [self.menuTableView reloadData];
+    
+}
 ```
 
 ## License
