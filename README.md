@@ -63,4 +63,4 @@ This code is distributed under the terms and conditions of the [MIT license](LIC
 
 ## Change-log
 
-A brief summary of each MBProgressHUD release can be found in the [CHANGELOG](CHANGELOG.mdown). 
+A brief summary of each this release can be found in the [CHANGELOG](CHANGELOG.mdown). 
